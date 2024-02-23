@@ -1,0 +1,9 @@
+# backend
+backend/node_modules
+backend/.env
+backend/package-lock.json
+
+# frontend
+frontend/ems/node_modules
+frontend/ems/package-lock.json
+frontend/ems/README.md
