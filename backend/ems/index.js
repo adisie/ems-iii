@@ -140,6 +140,21 @@ io.on('connect',socket => {
         }
     })
 
+    // message typing event
+    socket.on('messageTyping',data => {
+        let user = onlineUsers.find(user => user.userId === data.receiverId)
+        if(user){
+            socket.to(user.socketId).emit('messageTypingEvent',data)
+        }
+    })
+    // message sent
+    socket.on('messageSent',data => {
+        let user = onlineUsers.find(user => user.userId === data.receiverId)
+        if(user){
+            socket.to(user.socketId).emit('messageSentEvent',data)
+        }
+    })
+
     // employees
     // new employee event 
     socket.on('newEmployee',newEmployee=>{

@@ -11,6 +11,7 @@ const initialState = {
     isMessageSending: false,
     isMessageDeleting: false,
     receverId: null,
+    isMessageTyping: null,
 }
 
 // get all messages
@@ -68,6 +69,10 @@ const messagesSlice = createSlice({
         deleteMessageEvent: (state,action) => {
             state.messages = state.messages.filter(message => message._id !== action.payload)
         },
+        // message typing
+        setIsMessageTping: (state,action) => {
+            state.isMessageTyping = action.payload
+        },
     },
     extraReducers: builder => {
         builder
@@ -104,7 +109,6 @@ const messagesSlice = createSlice({
             // fulfilled
             .addCase(deleteMessage.fulfilled,(state,action)=> {
                 state.isMessageDeleting = false 
-                console.log(action.payload)
                 if(action.payload._id){
                     state.messages = state.messages.filter(message => message._id !== action.payload._id)
                     SOCKET.emit('deleteMessage',{_id:action.payload._id,receverId: state.receverId})
@@ -123,9 +127,12 @@ export const {
     setReceiverId,
     newMessageEvent,
     deleteMessageEvent,
+    setIsMessageTping,
 } = messagesSlice.actions
 // selectors
 // messages
 export const selectMessages = state => state.messages.messages
+// isMessageTyping
+export const selectIsMessageTyping = state => state.messages.isMessageTyping 
 // exports
 export default messagesSlice.reducer

@@ -54,7 +54,7 @@ const EmployeesList = () => {
                             <div className='opacity-[.35]'>No Employee Registereed</div>
                             <div className='opacity-[.35]'>Register Now</div>
                             <div className='mt-5'>
-                                <button className="text-5xl m-1 opacity-[.55] animate-bounce" 
+                                <button className="text-3xl m-1 opacity-[.55] animate-bounce" 
                                     onClick={()=>{
                                         dispatch(resetIsNewEmployeeDone())
                                         dispatch(setEmployeesDir('NE'))

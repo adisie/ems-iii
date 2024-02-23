@@ -107,3 +107,32 @@
     }
 }
 
+/* typing list */
+#typing-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: .13rem;
+}
+
+#typing-list li {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: green;
+    animation: grow 1.6s ease-in-out infinite;
+}
+
+#typing-list #typing-i {
+    animation-delay: .05s;
+}
+
+#typing-list #typing-ii {
+    animation-delay: .15s;
+}
+
+#typing-list #typing-iii {
+    animation-delay: .25s;
+}
+
+

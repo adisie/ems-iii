@@ -28,6 +28,8 @@ import {
     getAllMessages,
     newMessageEvent,
     deleteMessageEvent,
+    setIsMessageTping,
+    selectIsMessageTyping,
 } from '../messages/messagesSlice'
 
 // pages
@@ -53,6 +55,8 @@ const Center = () => {
     const centerDir = useSelector(selectCenterDir)
     // users slice
     const user = useSelector(selectUser)
+    // messages
+    const isMessageTyping = useSelector(selectIsMessageTyping)
 
     // hooks
     const dispatch = useDispatch()
@@ -87,17 +91,29 @@ const Center = () => {
 
     // new message 
     useEffect(()=>{
+        let incomeMessage = null
         SOCKET.on('newMessageEvent',message => {
+            incomeMessage = message
             dispatch(newMessageEvent(message))
         })
-    },[])
+        SOCKET.on('messageSentEvent',data => {
+            if(data.senderId === incomeMessage?.senderId){
+                dispatch(setIsMessageTping(null))
+            }
+        })
+    })
     // delete message
     useEffect(()=>{
         SOCKET.on('deleteMessageEvent',_id => {
             dispatch(deleteMessageEvent(_id))
         })
     },[])
-
+    // message typing event
+    useEffect(()=>{
+        SOCKET.on('messageTypingEvent',(data)=>{
+            dispatch(setIsMessageTping(data))
+        })
+    },[])
     // auth-check
     useEffect(()=>{
         dispatch(authCheck())

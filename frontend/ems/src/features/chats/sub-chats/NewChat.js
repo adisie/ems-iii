@@ -1,6 +1,11 @@
 import { useState } from "react"
 import {useSelector,useDispatch} from 'react-redux'
 
+// global constants
+import {
+  SOCKET,
+} from '../../../config'
+
 // actions from slices
 // chats
 import {
@@ -10,6 +15,10 @@ import {
 import {
   newMessage,
 } from '../../messages/messagesSlice'
+// users
+import {
+  selectUser,
+} from '../../users/usersSlice'
 
 // icons
 import { GrSend } from "react-icons/gr"
@@ -22,6 +31,11 @@ const NewChat = () => {
   const isChat = useSelector(selectIsChat)
   // states
   const [message,setMessage] = useState('')
+  // users
+  const user = useSelector(selectUser) 
+  
+  let receiverId = isChat?.members.find(mb => mb !== user?._id) 
+  
 
   // hooks
   const dispatch = useDispatch()
@@ -39,10 +53,11 @@ const NewChat = () => {
     let textarea = document.getElementById('chat') 
     if(message.trim()){
       dispatch(newMessage({connectionId: isChat?._id,message}))
+      SOCKET.emit('messageSent',{senderId: user?._id,receiverId})
     }
     setMessage('')
     textarea.style.height = '18px'
-    textarea.focus()
+    // textarea.focus()
   }
 
   // isMessagePending
@@ -50,6 +65,11 @@ const NewChat = () => {
     return <div className="flex items-center justify-center relative">
       <div className="absolute bottom-0 flex items-start bg-gray-200 px-1 py-[.195rem] w-[24px] h-[24px] border-emerald-700 border-4 rounded-full border-r-transparent animate-spin"></div>
     </div>
+  }
+
+  // on focus
+  const onKeyPressHandler = e => {
+    SOCKET.emit('messageTyping',{senderId: user?._id,receiverId})
   }
 
 
@@ -62,10 +82,11 @@ const NewChat = () => {
           onKeyUp={addjustTextareaHeight}  
           value={message} 
           onChange={e=>setMessage(e.target.value)} 
+          onFocus={onKeyPressHandler}  
         ></textarea>
         <button
           className="self-end text-xl opacity-[.65] hover:opacity-[.85]" 
-          onClick={submitHandler}
+          onClick={submitHandler} 
         >
           <GrSend />
         </button>
