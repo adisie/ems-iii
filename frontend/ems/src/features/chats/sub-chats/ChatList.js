@@ -37,7 +37,7 @@ const ChatList = ({isChat}) => {
 
   
   return (
-    <div className="flex-grow h-[84vh] overflow-y-auto pt-3" id="chat-list-container">
+    <div className="flex-grow h-[82vh] overflow-y-auto pt-3" id="chat-list-container">
         {
           finalMessages?.length > 0 
           ?

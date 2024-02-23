@@ -1,6 +1,11 @@
 import {useDispatch} from 'react-redux'
 import {formatDistanceToNow} from 'date-fns'
 
+// global constants
+import {
+  BASE_URL,
+} from '../../../config'
+
 // actions from slices
 // messages
 import {
@@ -9,6 +14,7 @@ import {
 
 // icons
 import { MdDelete } from "react-icons/md"
+import { CiSaveDown1 } from "react-icons/ci"
 
 // get username
 import GetUsername from '../../users/sub-users/GetUsername'
@@ -20,6 +26,7 @@ import GetProfile from '../../profiles/sub-profiles/GetProfile'
 const SingleChat = ({isOwn,message}) => {
     // hooks
     const dispatch = useDispatch()
+
   return (
     <>
     {
@@ -28,10 +35,58 @@ const SingleChat = ({isOwn,message}) => {
       <div className='m-1 mb-3 text-xs font-serif flex justify-end'>
         <div className='max-w-[75%]'>
           {/* message */}
-          <div className='bg-black bg-opacity-[.13] p-2 rounded-sm mr-5'>
-            <p>
-              {message.message}
-            </p>
+          <div className='p-2 rounded-sm mr-5 self-end flex flex-col items-end'>
+            {
+              message.files 
+              ?
+              <>
+              {
+                message.files.map((file,index)=>(
+                  <div key={index}> 
+                    {
+                      file.split('\\')[5] === 'image'
+                      ?
+                      <img src={`${BASE_URL}/${file}`} className='mb-1 h-[200px]'/>
+                      :
+                      file.split('\\')[5] === 'audio'
+                      ?
+                      <audio controls className='mb-1'>
+                        <source src={`${BASE_URL}/${file}`}/>
+                      </audio> 
+                      :
+                      file.split('\\')[5] === 'video'
+                      ?
+                      <video controls className='mb-1 h-[200px]'>
+                        <source src={`${BASE_URL}/${file}`}/>
+                      </video>
+                      :
+                      file.split('\\')[5] === 'application'
+                      ?
+                      <div>
+                        <a href={`${BASE_URL}/${file}`} download={true} className='mb-1 flex items-center px-3 py-1 bg-black bg-opacity-[.13] rounded-sm text-emerald-700'>
+                          <span>download document </span>
+                          <CiSaveDown1 className='ml-3 text-xl'/>
+                        </a>
+                      </div>
+                      :
+                      <></>
+                    }
+                  </div>
+                ))
+              }
+              </>
+              :
+              <></>
+            }
+            {
+              message.message 
+              ?
+              <p className='bg-black bg-opacity-[.13] px-3 py-1 rounded-sm'>
+                {message.message}
+              </p>
+              :
+              <></>
+            }
           </div>
           {/* controllers */}
           <div className='flex items-center justify-end py-1 mt-1'>
@@ -65,10 +120,58 @@ const SingleChat = ({isOwn,message}) => {
       :
       <div className='m-1 mb-3 text-xs font-serif'>
           {/* message */}
-          <div className='ml-5 max-w-[75%] bg-emerald-700 text-gray-200 p-2 rounded-sm'>
-            <p>
-              {message.message}
-            </p>
+          <div className='ml-5 max-w-[75%] text-gray-200 p-2 rounded-sm'>
+            {
+              message.files 
+              ?
+              <>
+              {
+                message.files.map((file,index)=>(
+                  <div key={index}> 
+                    {
+                      file.split('\\')[5] === 'image'
+                      ?
+                      <img src={`${BASE_URL}/${file}`} className='mb-1 h-[230px]'/>
+                      :
+                      file.split('\\')[5] === 'audio'
+                      ?
+                      <audio controls className='mb-1'>
+                        <source src={`${BASE_URL}/${file}`}/>
+                      </audio> 
+                      :
+                      file.split('\\')[5] === 'video'
+                      ?
+                      <video controls className='mb-1 h-[200px]'>
+                        <source src={`${BASE_URL}/${file}`}/>
+                      </video>
+                      :
+                      file.split('\\')[5] === 'application'
+                      ?
+                      <div>
+                        <a href={`${BASE_URL}/${file}`} download={true} className='mb-1 flex items-center px-3 py-1 bg-black bg-opacity-[.13] rounded-sm text-emerald-700'>
+                          <span>download document </span>
+                          <CiSaveDown1 className='ml-3 text-xl'/>
+                        </a>
+                      </div>
+                      :
+                      <></>
+                    }
+                  </div>
+                ))
+              }
+              </>
+              :
+              <></>
+            }
+            {
+              message.message 
+              ?
+              <p className='bg-emerald-700 px-3 py-1 rounded-sm w-[65%]'>
+                {message.message}
+              </p>
+              :
+              <></>
+            }
           </div>
           {/* author */}
           <div className='flex items-center mt-1'>

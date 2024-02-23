@@ -1,3 +1,4 @@
+const fs = require('fs')
 // models
 const Message = require('../models/messagesModel')
 const Connection = require('../models/connectionsModel')
@@ -23,7 +24,9 @@ const newMessage = async (req,res) => {
     try{
         const {connectionId,message} = req.body 
         const senderId = req.user._id 
-        const newMessage = await Message.create({connectionId,senderId,message}) 
+        let files = [] 
+        req.files?.forEach(file=>files.push(file.path))
+        const newMessage = await Message.create({connectionId,senderId,message,files}) 
         res.status(200).json({newMessage})
     }catch(err){
         res.status(400).json({
@@ -36,6 +39,13 @@ const newMessage = async (req,res) => {
 const deleteMessage = async (req,res) => {
     try{
         const message = await Message.findById(req.params._id) 
+        if(message.files){
+            message.files.forEach(file => {
+                if(fs.existsSync(file)){
+                    fs.unlinkSync(file)
+                }
+            })
+        }
         if(!message){
             return res.status(400).json({
                 error: 'message not found'

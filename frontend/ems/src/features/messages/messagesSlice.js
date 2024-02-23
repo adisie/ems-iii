@@ -134,5 +134,6 @@ export const {
 export const selectMessages = state => state.messages.messages
 // isMessageTyping
 export const selectIsMessageTyping = state => state.messages.isMessageTyping 
+export const selectIsMessageSending = state => state.messages.isMessageSending
 // exports
 export default messagesSlice.reducer
