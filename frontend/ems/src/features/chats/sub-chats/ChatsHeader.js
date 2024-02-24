@@ -38,7 +38,7 @@ const ChatsHeader = () => {
   clearTimeout(typingTimer)
   typingTimer = setTimeout(()=>{
     dispatch(setIsMessageTping(null))
-  },1000 * 60)
+  },1000 * 60 * 3)
   
   return (
     <div className="flex items-center p-1 text-xs text-emerald-700 bg-black bg-opacity-[.125] font-serif">
